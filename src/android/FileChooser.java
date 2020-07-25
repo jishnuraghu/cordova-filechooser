@@ -40,7 +40,14 @@ public class FileChooser extends CordovaPlugin {
         // type and title should be configurable
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(uri_filter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            intent.setType("*/*");
+            String[] mimeTypes = uri_filter.split("\\|");
+            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        } else {
+            intent.setType(uri_filter);
+        }
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 
